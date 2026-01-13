@@ -1,0 +1,88 @@
+digraph BasePCNModules {
+    rankdir=TB;
+    node [shape=box, style="rounded,filled", fontname="Helvetica"];
+    edge [color="#666666"];
+
+    // Core PCN Geometry Layer
+    subgraph cluster_core {
+        label="Core PCN Geometry";
+        style="rounded,dashed";
+        bgcolor="#e6f2ff";
+
+        PCN_Basic [label="Basic", fillcolor="#cce5ff"];
+        PCN_Graph [label="Graph", fillcolor="#cce5ff"];
+        PCN_Liquidity [label="Liquidity", fillcolor="#cce5ff"];
+        PCN_Wealth [label="Wealth", fillcolor="#cce5ff"];
+        PCN_Cuts [label="Cuts", fillcolor="#cce5ff"];
+        PCN_AlgorithmicCuts [label="AlgorithmicCuts", fillcolor="#cce5ff"];
+        PCN_CutCompleteness [label="CutCompleteness\n(MAIN THEOREM)", fillcolor="#99ccff", penwidth=3];
+        PCN_Rebalancing [label="Rebalancing", fillcolor="#cce5ff"];
+        PCN_Quotient [label="Quotient", fillcolor="#cce5ff"];
+        PCN_Algorithmic [label="Algorithmic", fillcolor="#cce5ff"];
+    }
+
+    // EVM Adapter Layer
+    subgraph cluster_evm {
+        label="Base EVM Adapter";
+        style="rounded,dashed";
+        bgcolor="#e6ffe6";
+
+        EVM_State [label="EVMAdapter.State", fillcolor="#ccffcc"];
+        EVM_FromEVMState [label="FromEVMState", fillcolor="#ccffcc"];
+        EVM_Extractor [label="Extractor", fillcolor="#ccffcc"];
+        EVM_SettlementOps [label="SettlementOps", fillcolor="#ccffcc"];
+        EVM_SettlementSemantics [label="SettlementSemantics", fillcolor="#ccffcc"];
+        EVM_SeamTheorem [label="SeamTheorem", fillcolor="#99ff99", penwidth=2];
+    }
+
+    // Security Infrastructure
+    subgraph cluster_security {
+        label="Security Infrastructure";
+        style="rounded,dashed";
+        bgcolor="#fff2e6";
+
+        SEC_MessageModelSeq [label="MessageModelSeq", fillcolor="#ffcc99"];
+        SEC_PostQuantumHTLC [label="PostQuantumHTLC", fillcolor="#ffcc99"];
+    }
+
+    // Crypto Layer
+    subgraph cluster_crypto {
+        label="Post-Quantum Crypto";
+        style="rounded,dashed";
+        bgcolor="#f2e6ff";
+
+        CRYPTO_XMSS [label="XMSS", fillcolor="#d9b3ff"];
+        CRYPTO_IncomparableEncoding [label="IncomparableEncoding", fillcolor="#d9b3ff"];
+    }
+
+    ContractsModel [label="Contracts.Model", fillcolor="#f0f0f0"];
+
+    // Core dependencies
+    PCN_Basic -> PCN_Graph;
+    PCN_Graph -> PCN_Liquidity;
+    PCN_Liquidity -> PCN_Wealth;
+    PCN_Wealth -> PCN_Cuts;
+    PCN_Cuts -> PCN_AlgorithmicCuts;
+    PCN_AlgorithmicCuts -> PCN_CutCompleteness;
+    PCN_AlgorithmicCuts -> PCN_Algorithmic;
+    PCN_Liquidity -> PCN_Rebalancing;
+    PCN_Wealth -> PCN_Rebalancing;
+    PCN_Wealth -> PCN_Quotient;
+    PCN_CutCompleteness -> PCN_Quotient;
+
+    // EVM dependencies
+    ContractsModel -> EVM_State;
+    EVM_State -> EVM_FromEVMState;
+    EVM_FromEVMState -> EVM_Extractor;
+    PCN_Graph -> EVM_Extractor;
+    EVM_State -> EVM_SettlementOps;
+    EVM_SettlementOps -> EVM_SettlementSemantics;
+    EVM_Extractor -> EVM_SettlementSemantics;
+    EVM_SettlementSemantics -> EVM_SeamTheorem;
+    PCN_CutCompleteness -> EVM_SeamTheorem;
+
+    // Security dependencies
+    SEC_MessageModelSeq -> SEC_PostQuantumHTLC;
+    CRYPTO_XMSS -> SEC_PostQuantumHTLC;
+    PCN_Graph -> SEC_PostQuantumHTLC;
+}
