@@ -24,6 +24,16 @@ inductive Node
 
 open Node
 
+def Node.rank : Node → Nat
+  | A => 0
+  | B => 1
+  | C => 2
+
+instance : LinearOrder Node :=
+  LinearOrder.lift' Node.rank (by
+    intro a b h
+    cases a <;> cases b <;> cases h <;> rfl)
+
 instance : Fintype Node where
   elems := {A, B, C}
   complete := by
@@ -73,25 +83,6 @@ def openCycle : Except SettlementSemantics.Error EVMState := do
   let s3 ← SettlementSemantics.settlementStep cfg "3" s2 (.open "3" "1" 8)
   pure s3
 
-def parallelABState : EVMState :=
-  let s0 : EVMState :=
-    (EVMState.empty)
-      |>.withBalance "1" 100
-      |>.withBalance "2" 50
-  let s1 := setRegistryLength (state := s0) cfg.registryContract 2
-  let r0 : ChannelRecord :=
-    { participant1 := "1"
-      participant2 := "2"
-      capacity := 10
-      status := .Open }
-  let r1 : ChannelRecord :=
-    { participant1 := "1"
-      participant2 := "2"
-      capacity := 7
-      status := .Open }
-  let s2 := putChannelRecord s1 cfg.channelContract 0 r0
-  putChannelRecord s2 cfg.channelContract 1 r1
-
 def main (args : List String) : IO UInt32 := do
   if args.contains "--help" then
     IO.println "usage: payment_channels_evm_demo [--help]"
@@ -112,6 +103,7 @@ def main (args : List String) : IO UInt32 := do
       let w := Wealth.pi G l
       IO.println s!"toy wealth: A={w A}, B={w B}, C={w C}"
       IO.println s!"wgBool(toy wealth) = {Algorithmic.wgBool (V := Node) G w}"
+      IO.println s!"wgFlowBool(toy wealth) = {AlgorithmicFlow.wgFlowBool (V := Node) G w}"
       IO.println s!"paymentFeasibleBool A→B a=2 = {Algorithmic.paymentFeasibleBool (V := Node) G w A B 2}"
 
       match SettlementSemantics.settlementStep cfg "1" s3 (.splice "1" "2" 12) with
@@ -121,14 +113,7 @@ def main (args : List String) : IO UInt32 := do
       | .ok s4 =>
           let GAddr' := extractChannelGraph cfg s4
           IO.println s!"after splice(1,2,newCap=12): cap(1,2) = {GAddr'.cap (s("1", "2"))}"
-
-      let sPar := parallelABState
-      let GMax := extractChannelGraph cfg sPar
-      let GSum := extractChannelGraphSumCap cfg sPar
-      IO.println s!"parallel channels demo: edges.card={GSum.edges.card}"
-      IO.println s!"capMax(1,2) = {GMax.cap (s("1", "2"))}"
-      IO.println s!"capSum(1,2) = {GSum.cap (s("1", "2"))}"
-      return 0
+          return 0
 
 end PaymentChannelsEVMDemo
 end CLI

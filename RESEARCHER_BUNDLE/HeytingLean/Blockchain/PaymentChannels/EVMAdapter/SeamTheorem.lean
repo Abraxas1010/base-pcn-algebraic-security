@@ -334,11 +334,18 @@ theorem settlementStep_open_consistent (cfg : ExtractorConfig)
     (hValidV : SettlementSemantics.isValidAddress v)
     (huv : u ≠ v) (hcap : cap ≠ 0)
     (hFresh : Sym2.mk (u, v) ∉ (Extracted cfg s).edges)
+    (hCaller : caller = u ∨ caller = v)
     (hFunds : SettlementSemantics.callerHasFunds s caller cap) :
     SettlementSemantics.settlementStep cfg caller s (.open u v cap) = .ok (openState cfg caller s u v cap) ∧
       SettlementOps.graphOpen (Extracted cfg s) u v cap = .ok (Extracted cfg (openState cfg caller s u v cap)) := by
   constructor
-  · simp [SettlementSemantics.settlementStep, openState, hValidU, hValidV, huv, hcap, hFresh, hFunds]
+  ·
+    have hAccess : ¬ (caller ≠ u ∧ caller ≠ v) := by
+      intro h
+      rcases hCaller with rfl | rfl
+      · exact h.1 rfl
+      · exact h.2 rfl
+    simp [SettlementSemantics.settlementStep, openState, hValidU, hValidV, huv, hcap, hFresh, hAccess, hFunds]
   ·
     -- Abstract open succeeds.
     have hOpenOk :
@@ -1235,18 +1242,19 @@ theorem topology_change_possible (cfg : ExtractorConfig)
     (hValidV : SettlementSemantics.isValidAddress v)
     (huv : u ≠ v) (hcap : cap ≠ 0)
     (hFresh : Sym2.mk (u, v) ∉ (Extracted cfg s).edges)
+    (hCaller : caller = u ∨ caller = v)
     (hFunds : SettlementSemantics.callerHasFunds s caller cap) :
     ∃ (c : SettlementOps.Call) (s' : EVMState),
       SettlementSemantics.settlementStep cfg caller s c = .ok s' ∧
       Extracted cfg s' ≠ Extracted cfg s := by
   refine ⟨.open u v cap, openState cfg caller s u v cap, ?_, ?_⟩
-  · exact (settlementStep_open_consistent cfg caller s u v cap hValidU hValidV huv hcap hFresh hFunds).1
+  · exact (settlementStep_open_consistent cfg caller s u v cap hValidU hValidV huv hcap hFresh hCaller hFunds).1
   ·
     classical
     intro hEq
     let edge : Sym2 Address := Sym2.mk (u, v)
     have hGraphOpen :=
-      (settlementStep_open_consistent cfg caller s u v cap hValidU hValidV huv hcap hFresh hFunds).2
+      (settlementStep_open_consistent cfg caller s u v cap hValidU hValidV huv hcap hFresh hCaller hFunds).2
     have hOpenOk :
         SettlementOps.graphOpen (Extracted cfg s) u v cap =
           .ok

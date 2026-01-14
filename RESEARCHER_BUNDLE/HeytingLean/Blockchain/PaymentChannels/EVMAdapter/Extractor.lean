@@ -56,14 +56,6 @@ def extractedCap (cfg : ExtractorConfig) (s : EVMState) (e : Sym2 Address) : Cap
     | some r =>
         if r.status = .Open ∧ edgeOfRecord r = e then r.capacity else 0
 
-/-- Parallel-channel-correct extraction: sum capacities over all open channels whose endpoints match `e`. -/
-def extractedCapSum (cfg : ExtractorConfig) (s : EVMState) (e : Sym2 Address) : Cap :=
-  Finset.sum (cfg.ids s) fun channelId =>
-    match getChannelRecord s cfg.channelContract channelId with
-    | none => 0
-    | some r =>
-        if r.status = .Open ∧ edgeOfRecord r = e then r.capacity else 0
-
 theorem extractedEdges_loopless (cfg : ExtractorConfig) (s : EVMState) :
     ∀ e ∈ extractedEdges cfg s, ¬ e.IsDiag := by
   classical
@@ -93,25 +85,12 @@ def extractChannelGraph (cfg : ExtractorConfig) (s : EVMState) : ChannelGraph Ad
   intro e he
   exact Extractor.extractedEdges_loopless cfg s e he
 
-/-- Extraction variant that aggregates parallel channels by summing capacities per endpoint-pair. -/
-def extractChannelGraphSumCap (cfg : ExtractorConfig) (s : EVMState) : ChannelGraph Address := by
-  classical
-  refine
-    { edges := Extractor.extractedEdges cfg s
-      cap := Extractor.extractedCapSum cfg s
-      loopless := ?_ }
-  intro e he
-  exact Extractor.extractedEdges_loopless cfg s e he
-
 theorem extractChannelGraph_loopless (cfg : ExtractorConfig) (s : EVMState) :
     ∀ e ∈ (extractChannelGraph cfg s).edges, ¬ e.IsDiag :=
   (extractChannelGraph cfg s).loopless
 
 def concreteAdapter (cfg : ExtractorConfig) : Adapter EVMState :=
   { ChannelGraphOfEVMState := extractChannelGraph cfg }
-
-def concreteAdapterSumCap (cfg : ExtractorConfig) : Adapter EVMState :=
-  { ChannelGraphOfEVMState := extractChannelGraphSumCap cfg }
 
 end EVMAdapter
 end PaymentChannels

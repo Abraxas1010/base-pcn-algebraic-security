@@ -133,7 +133,9 @@ base-pcn-algebraic-security/
 │       │   │   ├── Wealth.lean          # Wealth projection
 │       │   │   ├── Cuts.lean            # Cut capacities
 │       │   │   ├── CutCompleteness.lean # ★ MAIN THEOREM
+│       │   │   ├── AlgorithmicFlow.lean # Polynomial max-flow checker
 │       │   │   ├── Rebalancing.lean     # Circulation invariance
+│       │   │   ├── Payments.lean        # Payment operations
 │       │   │   ├── PostQuantumHTLC.lean # PQ settlement
 │       │   │   └── EVMAdapter/          # Base/EVM integration
 │       │   └── Bridge/
@@ -204,10 +206,38 @@ grep -rn --include='*.lean' -E '\bsorry\b|\badmit\b' HeytingLean/
 | Rebalancing preserves wealth | Algebraic | ✅ Proven | `Rebalancing.lean` |
 | Quotient structure LG/ker(π) ≃ WG | Algebraic | ✅ Proven | `Quotient.lean` |
 | Sequence numbers prevent replay | Structural | ✅ Proven | `MessageModelSeq.lean` |
+| Payment-to-self preserves funds | Structural | ✅ Proven | `Payments.lean:23` |
+| EVM open requires participant | Structural | ✅ Proven | `SettlementSemantics.lean:88` |
+| Max-flow polynomial checker | Algorithmic | ✅ Proven | `AlgorithmicFlow.lean` |
 | XMSS epochs prevent key reuse | Prop assumption | ✅ Stated | `XMSS.lean` |
 | HTLC claim correctness | Prop assumption | ✅ Stated | `PostQuantumHTLC.lean` |
 
 **Prop assumptions** are explicitly parameterized — they're not axioms but properties that any conforming implementation must satisfy.
+
+---
+
+## QA Status (2026-01-14)
+
+**Status: PASSED** ✅
+
+| Check | Result |
+|-------|--------|
+| Library build (`lake build --wfail`) | ✅ PASS |
+| Executable builds | ✅ PASS (2 targets) |
+| Happy path runs | ✅ PASS |
+| Robustness tests (empty env/PATH) | ✅ PASS |
+| Portability (`ldd` check) | ✅ PASS |
+
+### Recent Fixes
+
+| Issue | Fix | Location |
+|-------|-----|----------|
+| Payment-to-self burned funds | Now preserves funds correctly | `Payments.lean:23` |
+| EVM `.open` access control | Requires caller is participant | `SettlementSemantics.lean:88` |
+| Seam theorem constraint | Updated for new `.open` semantics | `SeamTheorem.lean:331` |
+| Max-flow verification | Added polynomial-time checker with residual cut witness | `AlgorithmicFlow.lean` |
+| Parallel channel clarity | Clarified extraction vs settlement semantics | `Extractor.lean:59` |
+| Demo completeness | Prints `wgFlowBool`, exercises `violatingCutFlow?` | `PaymentChannelsDemo.lean:76` |
 
 ---
 

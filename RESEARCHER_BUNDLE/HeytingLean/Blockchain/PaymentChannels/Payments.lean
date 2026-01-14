@@ -22,7 +22,9 @@ variable {V : Type u} [DecidableEq V]
 
 def pay (w : V → Cap) (i j : V) (a : Cap) : V → Cap :=
   fun v =>
-    if v = i then
+    if i = j then
+      w v
+    else if v = i then
       w i - a
     else if v = j then
       w j + a

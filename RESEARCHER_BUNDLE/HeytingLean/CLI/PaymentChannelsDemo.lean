@@ -19,6 +19,16 @@ inductive Node
 
 open Node
 
+def Node.rank : Node → Nat
+  | A => 0
+  | B => 1
+  | C => 2
+
+instance : LinearOrder Node :=
+  LinearOrder.lift' Node.rank (by
+    intro a b h
+    cases a <;> cases b <;> cases h <;> rfl)
+
 instance : Fintype Node where
   elems := {A, B, C}
   complete := by
@@ -65,6 +75,7 @@ def main (args : List String) : IO UInt32 := do
 
   IO.println s!"toy wealth: A={w A}, B={w B}, C={w C}"
   IO.println s!"wgBool(toy wealth) = {Algorithmic.wgBool (V := Node) G w}"
+  IO.println s!"wgFlowBool(toy wealth) = {AlgorithmicFlow.wgFlowBool (V := Node) G w}"
 
   let S : Finset Node := {A, B}
   let cin := Cuts.internalCapacity (G := G) S
@@ -77,12 +88,14 @@ def main (args : List String) : IO UInt32 := do
   let w' := Wealth.pi G l'
   IO.println s!"after cycle rebalancing: A={w' A}, B={w' B}, C={w' C}"
   IO.println s!"wgBool(after rebalancing) = {Algorithmic.wgBool (V := Node) G w'}"
+  IO.println s!"wgFlowBool(after rebalancing) = {AlgorithmicFlow.wgFlowBool (V := Node) G w'}"
 
   IO.println s!"paymentFeasibleBool A→B a=2 = {Algorithmic.paymentFeasibleBool (V := Node) G w A B 2}"
 
   let wPay12 := Payments.pay w A B 12
   IO.println s!"after A→B a=12: A={wPay12 A}, B={wPay12 B}, C={wPay12 C}"
   IO.println s!"wgBool(after pay12) = {Algorithmic.wgBool (V := Node) G wPay12}"
+  IO.println s!"wgFlowBool(after pay12) = {AlgorithmicFlow.wgFlowBool (V := Node) G wPay12}"
   IO.println s!"cutObstructedBool(after pay12) = {Cuts.Algorithmic.cutObstructedBool (V := Node) G wPay12}"
   IO.println s!"violatingCuts(after pay12).card = {(Cuts.Algorithmic.violatingCuts (V := Node) G wPay12).card}"
   let SB : Finset Node := {B}

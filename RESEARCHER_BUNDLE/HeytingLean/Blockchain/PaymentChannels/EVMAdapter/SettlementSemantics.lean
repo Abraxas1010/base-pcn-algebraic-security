@@ -98,6 +98,8 @@ def settlementStep (cfg : ExtractorConfig) (caller : Address) (s : EVMState) :
         .error .invalidCapacity
       else if (Sym2.mk (u, v)) ∈ (extractChannelGraph cfg s).edges then
         .error .alreadyOpen
+      else if caller ≠ u ∧ caller ≠ v then
+        .error (.accessDenied caller)
       else if ¬ callerHasFunds s caller cap then
         .error .insufficientFunds
       else
