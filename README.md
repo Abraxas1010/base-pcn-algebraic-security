@@ -1,9 +1,42 @@
+<p align="center">
+  <img src="assets/Apoth3osis.webp" alt="Apoth3osis Logo" width="200"/>
+</p>
+
+<p align="center">
+<strong>Our tech stack is ontological:</strong><br>
+Hardware — Physics<br>
+Software — Mathematics<br><br>
+<strong>Our engineering workflow is simple:</strong> discover, build, grow, learn & teach
+</p>
+
+---
+
+<sub>
+<strong>Notice of Proprietary Information</strong><br>
+This document outlines foundational concepts and methodologies developed during internal research and development at Apoth3osis. To protect our intellectual property and adhere to client confidentiality agreements, the code, architectural details, and performance metrics presented herein may be simplified, redacted, or presented for illustrative purposes only. This paper is intended to share our conceptual approach and does not represent the full complexity, scope, or performance of our production-level systems. The complete implementation and its derivatives remain proprietary.
+</sub>
+
+---
+
 # Base PCN Algebraic Security
 
 [![Lean 4](https://img.shields.io/badge/Lean-4.14.0-blue.svg)](https://leanprover.github.io/)
 [![Mathlib](https://img.shields.io/badge/Mathlib-v4.14.0-green.svg)](https://github.com/leanprover-community/mathlib4)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![No Sorry](https://img.shields.io/badge/sorry-0-brightgreen.svg)](#verification)
+
+## Credo
+
+> *"The genome doesn't specify the organism; it offers a set of pointers to regions in the space of all possible forms, relying on the laws of physics and computation to do the heavy lifting."*
+> — **Michael Levin**
+
+Our company operates as a lens for cognitive pointers: identifying established theoretical work and translating it into computationally parsable structures. By turning ideas into formal axioms, and axioms into verifiable code, we create the "Lego blocks" required to build complex systems with confidence.
+
+### Acknowledgment
+
+We humbly thank the collective intelligence of humanity for providing the technology and culture we cherish. We specifically acknowledge the authors of the works utilized herein; our formalization acts as a reciprocal validation—confirming the structural integrity of their original insights while securing the foundation upon which we build.
+
+---
 
 **Machine-verified algebraic security proofs for Payment Channel Networks on Coinbase's Base blockchain.**
 
