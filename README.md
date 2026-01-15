@@ -1,13 +1,9 @@
-<p align="center">
-  <img src="assets/Apoth3osis.webp" alt="Apoth3osis Logo" width="200"/>
-</p>
+<img src="assets/Apoth3osis.webp" alt="Apoth3osis Logo" width="140"/>
 
-<p align="center">
-<strong>Our tech stack is ontological:</strong><br>
-Hardware — Physics<br>
-Software — Mathematics<br><br>
-<strong>Our engineering workflow is simple:</strong> discover, build, grow, learn & teach
-</p>
+<sub><strong>Our tech stack is ontological:</strong><br>
+<strong>Hardware — Physics</strong><br>
+<strong>Software — Mathematics</strong><br><br>
+<strong>Our engineering workflow is simple:</strong> discover, build, grow, learn & teach</sub>
 
 ---
 
@@ -34,7 +30,7 @@ Our company operates as a lens for cognitive pointers: identifying established t
 
 ### Acknowledgment
 
-We humbly thank the collective intelligence of humanity for providing the technology and culture we cherish. We specifically acknowledge the authors of the works utilized herein; our formalization acts as a reciprocal validation—confirming the structural integrity of their original insights while securing the foundation upon which we build.
+We humbly thank the collective intelligence of humanity for providing the technology and culture we cherish. We do our best to properly reference the authors of the works utilized herein, though we may occasionally fall short. Our formalization acts as a reciprocal validation—confirming the structural integrity of their original insights while securing the foundation upon which we build. In truth, all creative work is derivative; we stand on the shoulders of those who came before, and our contributions are simply the next link in an unbroken chain of human ingenuity.
 
 ---
 
