@@ -296,10 +296,5 @@ If you use this work in academic research:
 
 ## License
 
-MIT License. See [LICENSE](LICENSE) for details.
-
----
-
-<p align="center">
-  <i>Proving security claims the mathematician's way: by demonstrating they follow necessarily from the structure of the problem.</i>
-</p>
+This project is provided under the Apoth3osis License Stack v1.
+See `LICENSE.md` and the files under `licenses/`.
